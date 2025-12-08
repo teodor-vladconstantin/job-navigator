@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      companies: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          owner_id: string
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          owner_id: string
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          owner_id?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "companies_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       applications: {
         Row: {
           candidate_id: string
@@ -64,6 +105,7 @@ export type Database = {
       }
       jobs: {
         Row: {
+          company_id: string | null
           company_name: string
           created_at: string
           description: string
@@ -83,6 +125,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          company_id?: string | null
           company_name: string
           created_at?: string
           description: string
@@ -102,6 +145,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          company_id?: string | null
           company_name?: string
           created_at?: string
           description?: string
@@ -121,6 +165,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "jobs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "jobs_employer_id_fkey"
             columns: ["employer_id"]
@@ -204,6 +255,44 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guest_applications: {
+        Row: {
+          cover_letter: string | null
+          created_at: string
+          cv_url: string
+          email: string
+          id: string
+          job_id: string
+          name: string
+        }
+        Insert: {
+          cover_letter?: string | null
+          created_at?: string
+          cv_url: string
+          email: string
+          id?: string
+          job_id: string
+          name: string
+        }
+        Update: {
+          cover_letter?: string | null
+          created_at?: string
+          cv_url?: string
+          email?: string
+          id?: string
+          job_id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guest_applications_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
             referencedColumns: ["id"]
           },
         ]

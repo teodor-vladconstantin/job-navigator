@@ -3,19 +3,20 @@ import { supabase } from '@/integrations/supabase/client';
 import type { Database } from '@/integrations/supabase/types';
 
 type Job = Database['public']['Tables']['jobs']['Row'];
+type CompanyPreview = Pick<Database['public']['Tables']['companies']['Row'], 'id' | 'name' | 'logo_url' | 'website'>;
+export type JobWithCompany = Job & { company?: CompanyPreview | null };
 
 interface UseJobsParams {
   search?: string;
   location?: string;
   jobTypes?: string[];
   seniorities?: string[];
-  techStack?: string[];
   page?: number;
   pageSize?: number;
 }
 
 interface UseJobsResult {
-  jobs: Job[];
+  jobs: JobWithCompany[];
   totalCount: number;
   totalPages: number;
   isLoading: boolean;
@@ -27,16 +28,15 @@ export const useJobs = ({
   location = 'all',
   jobTypes = [],
   seniorities = [],
-  techStack = [],
   page = 1,
   pageSize = 20,
 }: UseJobsParams = {}): UseJobsResult => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['jobs', search, location, jobTypes, seniorities, techStack, page],
+    queryKey: ['jobs', search, location, jobTypes, seniorities, page],
     queryFn: async () => {
       let query = supabase
         .from('jobs')
-        .select('*', { count: 'exact' })
+        .select('*, company:company_id (id, name, logo_url, website)', { count: 'exact' })
         .eq('status', 'active')
         .order('created_at', { ascending: false });
 
@@ -60,11 +60,6 @@ export const useJobs = ({
         query = query.in('seniority', seniorities as any);
       }
 
-      // Tech stack filter
-      if (techStack.length > 0) {
-        query = query.overlaps('tech_stack', techStack);
-      }
-
       // Pagination
       const from = (page - 1) * pageSize;
       const to = from + pageSize - 1;
@@ -75,7 +70,7 @@ export const useJobs = ({
       if (error) throw error;
 
       return {
-        jobs: data || [],
+        jobs: (data as JobWithCompany[]) || [],
         totalCount: count || 0,
       };
     },

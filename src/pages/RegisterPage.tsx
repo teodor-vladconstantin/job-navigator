@@ -2,6 +2,7 @@ import PageLayout from '@/components/layout/PageLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, Building, AlertCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -21,6 +22,7 @@ const RegisterPage = () => {
     fullName: '',
     role: 'candidate',
     companyName: '',
+    acceptTerms: false,
   });
   const [errors, setErrors] = useState<Partial<Record<keyof RegisterFormData, string>>>({});
   const [loading, setLoading] = useState(false);
@@ -47,6 +49,13 @@ const RegisterPage = () => {
     setFormData(prev => ({ ...prev, role: newRole }));
     if (errors.role) {
       setErrors(prev => ({ ...prev, role: undefined }));
+    }
+  };
+
+  const handleAcceptChange = (checked: boolean | string) => {
+    setFormData(prev => ({ ...prev, acceptTerms: Boolean(checked) }));
+    if (errors.acceptTerms) {
+      setErrors(prev => ({ ...prev, acceptTerms: undefined }));
     }
   };
 
@@ -268,6 +277,32 @@ const RegisterPage = () => {
                   </p>
                 )}
               </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-lg border border-border bg-muted/50">
+                <Checkbox
+                  id="acceptTerms"
+                  checked={formData.acceptTerms}
+                  onCheckedChange={handleAcceptChange}
+                  disabled={loading}
+                  className="mt-1"
+                  required
+                />
+                <div className="text-sm text-foreground/90">
+                  <label htmlFor="acceptTerms" className="font-medium cursor-pointer">
+                    Sunt de acord cu{' '}
+                    <Link to="/termeni" className="text-primary hover:underline">Termenii și Condițiile</Link>
+                    {' '}și{' '}
+                    <Link to="/confidentialitate" className="text-primary hover:underline">Politica de Confidențialitate</Link>.
+                  </label>
+                  <p className="text-xs text-muted-foreground mt-1">Este necesar pentru crearea contului.</p>
+                </div>
+              </div>
+              {errors.acceptTerms && (
+                <p className="-mt-2 text-sm text-destructive flex items-center gap-1">
+                  <AlertCircle className="w-4 h-4" />
+                  {errors.acceptTerms}
+                </p>
+              )}
 
               <Button 
                 type="submit"

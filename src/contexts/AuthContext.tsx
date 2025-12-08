@@ -19,6 +19,7 @@ interface AuthContextType {
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
+  setProfile?: (profile: Profile | null) => void;
   signUp: (email: string, password: string, fullName: string, role: 'candidate' | 'employer', companyName?: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
@@ -151,6 +152,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     session,
     profile,
     loading,
+    setProfile,
     signUp,
     signIn,
     signOut,

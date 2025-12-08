@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import PageLayout from '@/components/layout/PageLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,8 +16,8 @@ const Index = () => {
     location: 'all',
     jobTypes: [],
     seniorities: [],
-    techStack: [],
   });
+  const searchSectionRef = useRef<HTMLElement | null>(null);
 
   const debouncedSearch = useDebounce(searchInput, 300);
 
@@ -25,7 +26,6 @@ const Index = () => {
     location: filters.location,
     jobTypes: filters.jobTypes,
     seniorities: filters.seniorities,
-    techStack: filters.techStack,
     page: currentPage,
     pageSize: 20,
   });
@@ -45,10 +45,15 @@ const Index = () => {
       location: 'all',
       jobTypes: [],
       seniorities: [],
-      techStack: [],
     });
     setSearchInput('');
     setCurrentPage(1);
+  };
+
+  const scrollToJobs = () => {
+    if (searchSectionRef.current) {
+      searchSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   return (
@@ -60,19 +65,18 @@ const Index = () => {
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-fade-in">
               <Sparkles className="w-4 h-4" />
-              Aplică instant la joburi în tech
+              Aplică instant la joburi
             </div>
             
             <h1 className="font-heading font-extrabold text-4xl md:text-6xl lg:text-7xl mb-6 leading-tight">
-              Aplică la joburi în{' '}
+              Aplică la joburi rapid{' '}
               <span className="bg-gradient-primary bg-clip-text text-transparent">
                 &lt;30 secunde
               </span>
             </h1>
             
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-              Fără formularе interminabile. Fără pierderi de timp. 
-              Doar tu și jobul potrivit în câteva click-uri.
+              Fără formulare interminabile. Fără pierderi de timp. Doar tu și jobul potrivit în câteva click-uri.
             </p>
 
             {/* Search Bar */}
@@ -81,7 +85,7 @@ const Index = () => {
                 <div className="flex-1 flex items-center gap-2 px-4">
                   <Search className="w-5 h-5 text-muted-foreground" />
                   <Input
-                    placeholder="Caută poziție sau tehnologie..."
+                    placeholder="Caută poziție, industrie sau companie..."
                     className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
@@ -104,15 +108,15 @@ const Index = () => {
               </div>
               <div className="text-center">
                 <div className="text-3xl font-heading font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
-                  100+
+                  &lt;1 min
                 </div>
-                <p className="text-sm text-muted-foreground">Joburi active</p>
+                <p className="text-sm text-muted-foreground">Postezi job în</p>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-heading font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
-                  500+
+                  24/7
                 </div>
-                <p className="text-sm text-muted-foreground">Aplicări de succes</p>
+                <p className="text-sm text-muted-foreground">Vizibilitate maximă</p>
               </div>
             </div>
           </div>
@@ -120,7 +124,7 @@ const Index = () => {
       </section>
 
       {/* Job Listings Section */}
-      <section className="py-12 bg-background">
+      <section className="py-12 bg-background" ref={searchSectionRef}>
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Filters Sidebar */}
@@ -208,10 +212,16 @@ const Index = () => {
             Înregistrează-te acum și aplică la primul job în mai puțin de un minut
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="shadow-button">
-              Înregistrare gratuită
+            <Button size="lg" className="shadow-button text-white" asChild>
+              <Link to="/register">Înregistrare gratuită</Link>
             </Button>
-            <Button size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white/30">
+            <Button
+              size="lg"
+              variant="outline"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/30"
+              type="button"
+              onClick={scrollToJobs}
+            >
               Vezi joburi
             </Button>
           </div>

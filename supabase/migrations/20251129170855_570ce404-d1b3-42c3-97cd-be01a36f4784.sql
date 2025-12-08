@@ -63,7 +63,6 @@ CREATE TABLE public.saved_jobs (
   UNIQUE(user_id, job_id)
 );
 
--- Create indexes for performance
 CREATE INDEX idx_jobs_employer ON public.jobs(employer_id);
 CREATE INDEX idx_jobs_status ON public.jobs(status);
 CREATE INDEX idx_jobs_created ON public.jobs(created_at DESC);
@@ -72,14 +71,11 @@ CREATE INDEX idx_jobs_type ON public.jobs(job_type);
 CREATE INDEX idx_jobs_seniority ON public.jobs(seniority);
 
 CREATE INDEX idx_applications_job ON public.applications(job_id);
-CREATE INDEX idx_applications_candidate ON public.applications(candidate_id);
 CREATE INDEX idx_applications_status ON public.applications(status);
 
 CREATE INDEX idx_saved_jobs_user ON public.saved_jobs(user_id);
-CREATE INDEX idx_saved_jobs_job ON public.saved_jobs(job_id);
 
 -- Enable RLS
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.jobs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.applications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.saved_jobs ENABLE ROW LEVEL SECURITY;
@@ -97,7 +93,6 @@ CREATE POLICY "Users can update their own profile"
   ON public.profiles FOR UPDATE 
   USING (auth.uid() = id);
 
--- RLS Policies for jobs
 CREATE POLICY "Active jobs are viewable by everyone" 
   ON public.jobs FOR SELECT 
   USING (status = 'active' OR employer_id = auth.uid());
@@ -122,7 +117,9 @@ CREATE POLICY "Users can view their own applications"
   ON public.applications FOR SELECT 
   USING (
     auth.uid() = candidate_id OR 
-    EXISTS(SELECT 1 FROM public.jobs WHERE jobs.id = applications.job_id AND jobs.employer_id = auth.uid())
+    EXISTS(
+      SELECT 1 FROM public.jobs WHERE jobs.id = applications.job_id AND jobs.employer_id = auth.uid()
+    )
   );
 
 CREATE POLICY "Candidates can insert applications" 
@@ -150,6 +147,31 @@ CREATE POLICY "Users can insert their own saved jobs"
 CREATE POLICY "Users can delete their own saved jobs" 
   ON public.saved_jobs FOR DELETE 
   USING (auth.uid() = user_id);
+
+-- Guest applications table (no auth required to insert)
+CREATE TABLE public.guest_applications (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  job_id UUID REFERENCES public.jobs(id) ON DELETE CASCADE NOT NULL,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  cv_url TEXT NOT NULL,
+  cover_letter TEXT CHECK (char_length(cover_letter) <= 300),
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+CREATE INDEX idx_guest_applications_job ON public.guest_applications(job_id);
+
+ALTER TABLE public.guest_applications ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can insert guest applications"
+  ON public.guest_applications FOR INSERT
+  WITH CHECK (true);
+
+CREATE POLICY "Employers can view guest applications for their jobs"
+  ON public.guest_applications FOR SELECT
+  USING (
+    EXISTS(SELECT 1 FROM public.jobs WHERE jobs.id = guest_applications.job_id AND jobs.employer_id = auth.uid())
+  );
 
 -- Function to auto-update updated_at
 CREATE OR REPLACE FUNCTION public.update_updated_at_column()
@@ -218,5 +240,25 @@ CREATE POLICY "Employers can view CVs from applications"
       JOIN public.jobs j ON a.job_id = j.id
       WHERE j.employer_id = auth.uid()
       AND a.cv_url LIKE '%' || name || '%'
+    )
+  );
+
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('guest-cvs', 'guest-cvs', false)
+ON CONFLICT (id) DO NOTHING;
+
+CREATE POLICY "Anyone can upload guest CVs"
+  ON storage.objects FOR INSERT
+  WITH CHECK (bucket_id = 'guest-cvs');
+
+CREATE POLICY "Employers can view guest CVs"
+  ON storage.objects FOR SELECT
+  USING (
+    bucket_id = 'guest-cvs' AND
+    EXISTS (
+      SELECT 1 FROM public.guest_applications ga
+      JOIN public.jobs j ON ga.job_id = j.id
+      WHERE j.employer_id = auth.uid()
+      AND ga.cv_url = name
     )
   );

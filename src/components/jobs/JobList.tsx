@@ -2,18 +2,14 @@ import JobCard from './JobCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, Briefcase } from 'lucide-react';
-import type { Database } from '@/integrations/supabase/types';
-
-type Job = Database['public']['Tables']['jobs']['Row'];
+import type { JobWithCompany } from '@/hooks/useJobs';
 
 interface JobListProps {
-  jobs: Job[];
+  jobs: JobWithCompany[];
   isLoading: boolean;
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  onSave?: (jobId: string) => void;
-  savedJobIds?: string[];
 }
 
 const JobListSkeleton = () => (
@@ -56,8 +52,6 @@ const JobList = ({
   currentPage,
   totalPages,
   onPageChange,
-  onSave,
-  savedJobIds = [],
 }: JobListProps) => {
   if (isLoading) {
     return <JobListSkeleton />;
@@ -74,8 +68,6 @@ const JobList = ({
           <JobCard
             key={job.id}
             job={job}
-            onSave={onSave}
-            isSaved={savedJobIds.includes(job.id)}
           />
         ))}
       </div>

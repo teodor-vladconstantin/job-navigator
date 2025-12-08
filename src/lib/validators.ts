@@ -14,6 +14,10 @@ export const registerSchema = z.object({
     required_error: 'Selectează un rol',
   }),
   companyName: z.string().optional(),
+  acceptTerms: z.boolean().refine(Boolean, {
+    message: 'Trebuie să accepți termenii și politica de confidențialitate',
+    path: ['acceptTerms'],
+  }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: 'Parolele nu se potrivesc',
   path: ['confirmPassword'],
