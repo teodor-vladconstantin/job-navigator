@@ -68,9 +68,11 @@ const EmployerDashboard = () => {
 
   const openCv = async (path: string, bucket: 'cvs' | 'guest-cvs') => {
     setCvLoading(true);
+    // Keep these outside try/catch so we can re-use in error handling
+    const rawPath = path;
+    const { bucket: bucketToUse, path: cleanPath } = resolveBucketAndPath(path, bucket);
+
     try {
-      const rawPath = path;
-      const { bucket: bucketToUse, path: cleanPath } = resolveBucketAndPath(path, bucket);
 
       // If raw URL points to a different project, just open it as-is
       if (rawPath.startsWith('http') && SUPABASE_URL && !rawPath.includes(SUPABASE_URL)) {
