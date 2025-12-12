@@ -235,7 +235,7 @@ const EmployerDashboard = () => {
                     <p className="text-xs text-muted-foreground">{job.company_name} • {job.location}</p>
                     <p className="text-xs text-muted-foreground">Status: {job.status}</p>
                   </div>
-                  <div className="flex items-center gap-2 flex-wrap justify-end min-w-[220px]">
+                  <div className="flex items-center gap-2 flex-wrap justify-end md:min-w-[220px]">
                     <span className="text-xs text-muted-foreground w-full text-right">{formatDate(job.created_at)}</span>
                     {job.status !== 'paused' && (
                       <Button size="sm" variant="outline" onClick={() => handleAction(job.id, 'pause')}>

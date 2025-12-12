@@ -112,8 +112,17 @@ All colors MUST be HSL.
 }
 
 @layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
   * {
     @apply border-border;
+  }
+
+  html, body {
+    /* Prevent horizontal scroll caused by overflowing elements */
+    overflow-x: hidden;
   }
 
   body {

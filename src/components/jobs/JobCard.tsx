@@ -138,7 +138,7 @@ const JobCard = ({ job }: JobCardProps) => {
 
   return (
     <Card className="group hover:shadow-card transition-smooth border-border">
-      <CardContent className="p-6">
+      <CardContent className="p-4 sm:p-6">
         <div className="flex items-start justify-between mb-4">
           <div className="flex gap-3 flex-1">
             {logoUrl ? (
@@ -188,7 +188,7 @@ const JobCard = ({ job }: JobCardProps) => {
 
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span>{formatRelativeTime(new Date(job.created_at))}</span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <Link to={`/jobs/${job.id}`}>
               <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
                 Vezi detalii →
