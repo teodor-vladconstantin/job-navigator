@@ -37,8 +37,28 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; 2025 joben.eu. Toate drepturile rezervate.</p>
+        <div className="border-t border-border mt-8 pt-8 text-sm text-muted-foreground">
+          <div className="container mx-auto px-4 flex flex-col md:flex-row items-center md:justify-between gap-4">
+            <p className="text-center md:text-left">&copy; 2025 joben.eu. Toate drepturile rezervate.</p>
+
+            <div className="flex justify-center md:justify-end">
+              <a
+                href="https://www.producthunt.com/products/joben?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-joben"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Joben on Product Hunt"
+                className="inline-block"
+              >
+                <img
+                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1049582&theme=light&t=1765567954159"
+                  alt="Joben - Job search without the bureaucracy | Product Hunt"
+                  style={{ width: 250, height: 54 }}
+                  width={250}
+                  height={54}
+                />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
