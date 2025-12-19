@@ -3,6 +3,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { useState, useRef } from 'react';
 import { X } from 'lucide-react';
 import { LOCATIONS, JOB_TYPE_LABELS, SENIORITY_LABELS } from '@/lib/constants';
 
@@ -19,6 +21,18 @@ interface JobFiltersProps {
 }
 
 const JobFilters = ({ filters, onChange, onReset }: JobFiltersProps) => {
+  const [locQuery, setLocQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const onOpenChange = (open: boolean) => {
+    if (open) {
+      setTimeout(() => inputRef.current?.focus(), 0);
+    } else {
+      setLocQuery('');
+    }
+  };
+  const filteredLocations = LOCATIONS.filter((l) =>
+    l.toLowerCase().includes(locQuery.trim().toLowerCase()),
+  );
   const handleJobTypeToggle = (type: string) => {
     const newTypes = filters.jobTypes.includes(type)
       ? filters.jobTypes.filter((t) => t !== type)
@@ -56,13 +70,25 @@ const JobFilters = ({ filters, onChange, onReset }: JobFiltersProps) => {
           <Select
             value={filters.location}
             onValueChange={(value) => onChange({ ...filters, location: value })}
+            onOpenChange={onOpenChange}
           >
             <SelectTrigger>
               <SelectValue placeholder="Toate locațiile" />
             </SelectTrigger>
             <SelectContent>
+              <div className="p-2">
+                <Input
+                  ref={inputRef}
+                  placeholder="Caută locație..."
+                  value={locQuery}
+                  onChange={(e) => setLocQuery(e.target.value)}
+                  onKeyDown={(e) => { e.stopPropagation(); e.nativeEvent.stopImmediatePropagation(); }}
+                  onKeyUp={(e) => { e.stopPropagation(); }}
+                  onKeyPress={(e) => { e.stopPropagation(); }}
+                />
+              </div>
               <SelectItem value="all">Toate locațiile</SelectItem>
-              {LOCATIONS.map((location) => (
+              {filteredLocations.map((location) => (
                 <SelectItem key={location} value={location}>
                   {location}
                 </SelectItem>

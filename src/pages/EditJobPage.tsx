@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import PageLayout from '@/components/layout/PageLayout';
@@ -32,11 +32,17 @@ const EditJobPage = () => {
 
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('Remote');
+  const [locQuery, setLocQuery] = useState('');
+  const filteredLocations = LOCATIONS.filter((l) => l.toLowerCase().includes(locQuery.trim().toLowerCase()));
+  const locInputRef = useRef<HTMLInputElement | null>(null);
+  const onLocOpenChange = (open: boolean) => {
+    if (open) setTimeout(() => locInputRef.current?.focus(), 0);
+    else setLocQuery('');
+  };
   const [jobType, setJobType] = useState<Job['job_type']>('remote');
   const [seniority, setSeniority] = useState<Job['seniority']>('junior');
   const [salaryMin, setSalaryMin] = useState('');
   const [salaryMax, setSalaryMax] = useState('');
-  const [techStack, setTechStack] = useState('');
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState<Job['status']>('active');
   const [selectedCompanyId, setSelectedCompanyId] = useState<string>('none');
@@ -82,7 +88,6 @@ const EditJobPage = () => {
       setSeniority(job.seniority);
       setSalaryMin(job.salary_min?.toString() || '');
       setSalaryMax(job.salary_max?.toString() || '');
-      setTechStack((job.tech_stack || []).join(', '));
       setDescription(job.description);
       setStatus(job.status);
       setSelectedCompanyId(job.company_id || 'none');
@@ -163,9 +168,7 @@ const EditJobPage = () => {
           salary_min: salaryMinNumber,
           salary_max: salaryMaxNumber,
           salary_public: salaryMinNumber !== null || salaryMaxNumber !== null,
-          tech_stack: techStack
-            ? techStack.split(',').map(t => t.trim()).filter(Boolean)
-            : [],
+          // tech_stack removed per product request
           description: description.trim(),
           requirements: description.trim(),
           status,
@@ -231,12 +234,23 @@ const EditJobPage = () => {
                 </div>
                 <div>
                   <Label>Locație</Label>
-                  <Select value={location} onValueChange={setLocation}>
+                  <Select value={location} onValueChange={setLocation} onOpenChange={onLocOpenChange}>
                     <SelectTrigger>
                       <SelectValue placeholder="Alege locația" />
                     </SelectTrigger>
                     <SelectContent>
-                      {LOCATIONS.map(loc => (
+                      <div className="p-2">
+                        <Input
+                          ref={locInputRef}
+                          placeholder="Caută locație..."
+                          value={locQuery}
+                          onChange={(e) => setLocQuery(e.target.value)}
+                          onKeyDown={(e) => { e.stopPropagation(); e.nativeEvent.stopImmediatePropagation(); }}
+                          onKeyUp={(e) => { e.stopPropagation(); }}
+                          onKeyPress={(e) => { e.stopPropagation(); }}
+                        />
+                      </div>
+                      {filteredLocations.map(loc => (
                         <SelectItem key={loc} value={loc}>
                           {loc}
                         </SelectItem>
@@ -290,10 +304,7 @@ const EditJobPage = () => {
                 </div>
               </div>
 
-              <div>
-                <Label htmlFor="tech-stack">Tech stack (virgule)</Label>
-                <Input id="tech-stack" value={techStack} onChange={(e) => setTechStack(e.target.value)} />
-              </div>
+              {/* Tech stack field removed per product request */}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">

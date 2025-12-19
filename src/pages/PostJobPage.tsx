@@ -5,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Briefcase, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -22,6 +22,16 @@ const PostJobPage = () => {
   const [jobType, setJobType] = useState<keyof typeof JOB_TYPE_LABELS>('remote');
   const [seniority, setSeniority] = useState<keyof typeof SENIORITY_LABELS>('junior');
   const [location, setLocation] = useState<string>('Remote');
+  const [locQuery, setLocQuery] = useState<string>('');
+  const filteredLocations = LOCATIONS.filter((l) => l.toLowerCase().includes(locQuery.trim().toLowerCase()));
+  const locInputRef = useRef<HTMLInputElement | null>(null);
+  const onLocOpenChange = (open: boolean) => {
+    if (open) {
+      setTimeout(() => locInputRef.current?.focus(), 0);
+    } else {
+      setLocQuery('');
+    }
+  };
   const [selectedCompanyId, setSelectedCompanyId] = useState<string>('none');
 
   const { data: companies = [], isLoading: companiesLoading } = useQuery({
@@ -62,7 +72,6 @@ const PostJobPage = () => {
     const selectedSeniority = seniority;
     const salary_min_raw = formData.get('salary_min') as string | null;
     const salary_max_raw = formData.get('salary_max') as string | null;
-    const tech_stack_raw = String(formData.get('tech_stack') || '').trim();
     const description = String(formData.get('description') || '').trim();
     const finalCompanyId = selectedCompanyId && selectedCompanyId !== 'none' ? selectedCompanyId : null;
     if (!finalCompanyId) {
@@ -83,9 +92,6 @@ const PostJobPage = () => {
     const salary_max = salary_max_raw && salary_max_raw !== '' && !isNaN(Number(salary_max_raw))
       ? Number(salary_max_raw)
       : null;
-    const tech_stack = tech_stack_raw
-      ? tech_stack_raw.split(',').map(t => t.trim()).filter(Boolean)
-      : [];
 
     if (title.length < 10) {
       toast({ variant: 'destructive', title: 'Titlu prea scurt', description: 'Minim 10 caractere (constrângere DB).' });
@@ -115,7 +121,7 @@ const PostJobPage = () => {
         salary_min,
         salary_max,
         salary_public: salary_min !== null || salary_max !== null,
-        tech_stack,
+        // tech_stack removed per product request
         description,
         requirements: description,
         status: 'active',
@@ -172,7 +178,18 @@ const PostJobPage = () => {
                       <SelectValue placeholder="Alege locația" />
                     </SelectTrigger>
                     <SelectContent>
-                      {LOCATIONS.map(loc => (
+                      <div className="p-2">
+                        <Input
+                          ref={locInputRef}
+                          placeholder="Caută locație..."
+                          value={locQuery}
+                          onChange={(e) => setLocQuery(e.target.value)}
+                          onKeyDown={(e) => { e.stopPropagation(); e.nativeEvent.stopImmediatePropagation(); }}
+                          onKeyUp={(e) => { e.stopPropagation(); }}
+                          onKeyPress={(e) => { e.stopPropagation(); }}
+                        />
+                      </div>
+                      {filteredLocations.map(loc => (
                         <SelectItem key={loc} value={loc}>
                           {loc}
                         </SelectItem>
@@ -259,10 +276,7 @@ const PostJobPage = () => {
                 </div>
               </div>
 
-              <div>
-                <Label htmlFor="tech_stack">Tech stack (separat prin virgule)</Label>
-                <Input id="tech_stack" name="tech_stack" placeholder="React, TypeScript, Tailwind" />
-              </div>
+              {/* Tech stack field removed per product request */}
 
               <div>
                 <Label htmlFor="description">Job description</Label>

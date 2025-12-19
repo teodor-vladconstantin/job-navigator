@@ -120,7 +120,6 @@ export type Database = {
           salary_public: boolean | null
           seniority: Database["public"]["Enums"]["seniority_level"]
           status: Database["public"]["Enums"]["job_status"]
-          tech_stack: string[] | null
           title: string
           updated_at: string
         }
@@ -140,7 +139,6 @@ export type Database = {
           salary_public?: boolean | null
           seniority: Database["public"]["Enums"]["seniority_level"]
           status?: Database["public"]["Enums"]["job_status"]
-          tech_stack?: string[] | null
           title: string
           updated_at?: string
         }
@@ -160,7 +158,6 @@ export type Database = {
           salary_public?: boolean | null
           seniority?: Database["public"]["Enums"]["seniority_level"]
           status?: Database["public"]["Enums"]["job_status"]
-          tech_stack?: string[] | null
           title?: string
           updated_at?: string
         }
