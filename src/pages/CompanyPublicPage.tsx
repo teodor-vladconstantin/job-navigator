@@ -82,13 +82,22 @@ const CompanyPublicPage = () => {
               <p className="text-muted-foreground text-sm">Nu există joburi active.</p>
             )}
             {jobsQuery.data?.map(job => (
-              <div key={job.id} className="border rounded-lg p-3 space-y-1">
-                <Link to={`/jobs/${job.id}`} className="font-medium hover:underline">{job.title}</Link>
-                <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-                  <Badge variant="secondary">{job.location}</Badge>
-                  <Badge variant="secondary">{JOB_TYPE_LABELS[job.job_type]}</Badge>
-                  <Badge variant="secondary">{SENIORITY_LABELS[job.seniority]}</Badge>
-                  <Badge variant="secondary">{formatRelativeTime(job.created_at)}</Badge>
+              <div key={job.id} className="border rounded-lg p-3">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <Link to={`/jobs/${job.id}`} className="font-medium hover:underline">{job.title}</Link>
+                    <div className="flex flex-wrap gap-2 text-xs text-muted-foreground mt-2">
+                      <Badge variant="secondary">{job.location}</Badge>
+                      <Badge variant="secondary">{JOB_TYPE_LABELS[job.job_type]}</Badge>
+                      <Badge variant="secondary">{SENIORITY_LABELS[job.seniority]}</Badge>
+                      <Badge variant="secondary">{formatRelativeTime(job.created_at)}</Badge>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <Button asChild size="sm" variant="default">
+                      <Link to={`/jobs/${job.id}`}>Vezi job</Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             ))}
