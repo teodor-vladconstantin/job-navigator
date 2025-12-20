@@ -11,6 +11,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useEffect, useState } from 'react';
 import { Loader2, Eye } from 'lucide-react';
 
+import { useRef } from 'react';
+
 const ProfilePage = () => {
   const { profile, user, setProfile, refreshProfile } = useAuth();
   const { toast } = useToast();
@@ -24,6 +26,12 @@ const ProfilePage = () => {
   const [cvPreviewOpen, setCvPreviewOpen] = useState(false);
   const [cvPreviewUrl, setCvPreviewUrl] = useState<string | null>(null);
   const [cvLoading, setCvLoading] = useState(false);
+
+  // State pentru schimbare parolă
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [changingPassword, setChangingPassword] = useState(false);
 
   useEffect(() => {
     setFullName(profile?.full_name || '');
@@ -39,6 +47,42 @@ const ProfilePage = () => {
     if (error) throw error;
     const { data } = supabase.storage.from('cvs').getPublicUrl(safeName);
     return data.publicUrl;
+  };
+
+  // Schimbare parolă din cont
+  const handleChangePassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!user) return;
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast({ variant: 'destructive', title: 'Completează toate câmpurile.' });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast({ variant: 'destructive', title: 'Parolele nu coincid.' });
+      return;
+    }
+    setChangingPassword(true);
+    // Reautentificare pentru siguranță
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password: currentPassword,
+    });
+    if (signInError) {
+      toast({ variant: 'destructive', title: 'Parola curentă este greșită.' });
+      setChangingPassword(false);
+      return;
+    }
+    // Schimbă parola
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) {
+      toast({ variant: 'destructive', title: 'Eroare la schimbarea parolei.' });
+    } else {
+      toast({ title: 'Parolă schimbată cu succes.' });
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    }
+    setChangingPassword(false);
   };
 
   const normalizePath = (url: string) => {
@@ -121,6 +165,32 @@ const ProfilePage = () => {
   return (
     <PageLayout>
       <div className="container mx-auto px-4 py-10">
+        {/* Formular schimbare parolă */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Schimbă parola</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form className="space-y-4" onSubmit={handleChangePassword}>
+              <div className="space-y-2">
+                <Label>Parola curentă</Label>
+                <Input type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} autoComplete="current-password" />
+              </div>
+              <div className="space-y-2">
+                <Label>Parolă nouă</Label>
+                <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} autoComplete="new-password" />
+              </div>
+              <div className="space-y-2">
+                <Label>Confirmă parolă nouă</Label>
+                <Input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} autoComplete="new-password" />
+              </div>
+              <Button type="submit" disabled={changingPassword} className="bg-gradient-primary">
+                {changingPassword ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+                Schimbă parola
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
         <Card>
           <CardHeader>
             <CardTitle>Profilul meu</CardTitle>

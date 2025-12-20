@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import NotFound from "./pages/NotFound";
+import ResetNewPasswordPage from "./pages/ResetNewPasswordPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import EmployerDashboard from "./pages/EmployerDashboard";
 import CandidateDashboard from "./pages/CandidateDashboard";
 import ProfilePage from "./pages/ProfilePage";
@@ -50,6 +52,8 @@ const App = () => (
             <Route path="/confidentialitate" element={<PrivacyPage />} />
             <Route path="/despre" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/resetare-parola-noua" element={<ResetNewPasswordPage />} />
+            <Route path="/resetare-parola" element={<ForgotPasswordPage />} />
             <Route
               path="/dashboard/employer"
               element={
