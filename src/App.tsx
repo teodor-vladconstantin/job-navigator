@@ -6,7 +6,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import NotFound from "./pages/NotFound";
+import NotFoundPage from "./pages/404";
 import ResetNewPasswordPage from "./pages/ResetNewPasswordPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import EmployerDashboard from "./pages/EmployerDashboard";
@@ -122,7 +122,7 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </ScrollToTop>
       </AuthProvider>
