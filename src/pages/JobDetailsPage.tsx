@@ -9,7 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { formatSalary, formatRelativeTime } from '@/lib/helpers';
 import { JOB_TYPE_LABELS, SENIORITY_LABELS } from '@/lib/constants';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AlertCircle, ArrowLeft, FileText } from 'lucide-react';
+import { AlertCircle, ArrowLeft, FileText, Linkedin } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -207,7 +207,26 @@ const JobDetailsPage = () => {
                         data.company?.name ?? data.company_name
                       )}
                     </div>
-                    <div className="text-3xl font-bold leading-tight break-words">{data.title}</div>
+                    <div className="flex items-center gap-2">
+                      <div className="text-3xl font-bold leading-tight break-words">{data.title}</div>
+                      {/* LinkedIn Share Button */}
+                      <Button
+                        className="ml-2 px-4 py-2 bg-[#0A66C2] text-white font-semibold flex items-center gap-2 shadow-lg hover:bg-[#0A66C2] hover:shadow-[0_0_16px_4px_#0A66C2] focus:bg-[#0A66C2] focus:shadow-[0_0_16px_4px_#0A66C2] transition-all duration-200"
+                        style={{ boxShadow: '0 0 12px 2px #0A66C2' }}
+                        asChild
+                        title="Distribuie pe LinkedIn"
+                        aria-label="Distribuie pe LinkedIn"
+                      >
+                        <a
+                          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Linkedin className="w-5 h-5" />
+                          <span className="ml-2">Distribuie pe LinkedIn</span>
+                        </a>
+                      </Button>
+                    </div>
                   </CardTitle>
                   <div className="flex flex-wrap gap-2 mt-2">
                     <Badge variant="secondary">{data.location}</Badge>
