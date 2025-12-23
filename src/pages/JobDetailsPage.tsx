@@ -87,7 +87,8 @@ const JobDetailsPage = () => {
   const [guestOpen, setGuestOpen] = useState(false);
   const [guestName, setGuestName] = useState('');
   const [guestEmail, setGuestEmail] = useState('');
-  const [guestCover, setGuestCover] = useState('');
+  const [guestPhone, setGuestPhone] = useState('');
+
   const [guestCv, setGuestCv] = useState<File | null>(null);
   const [guestAcceptTerms, setGuestAcceptTerms] = useState(false);
   const [guestSubmitting, setGuestSubmitting] = useState(false);
@@ -118,8 +119,8 @@ const JobDetailsPage = () => {
   const handleGuestApply = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validJobId) return;
-    if (!guestName.trim() || !guestEmail.trim() || !guestCv) {
-      toast({ variant: 'destructive', title: 'Completează câmpurile', description: 'Nume, email și CV sunt obligatorii.' });
+    if (!guestName.trim() || !guestEmail.trim() || !guestPhone.trim() || !guestCv) {
+      toast({ variant: 'destructive', title: 'Completează câmpurile', description: 'Nume, email, telefon și CV sunt obligatorii.' });
       return;
     }
     if (!guestAcceptTerms) {
@@ -140,8 +141,9 @@ const JobDetailsPage = () => {
         job_id: validJobId,
         name: guestName.trim(),
         email: guestEmail.trim(),
+        phone: guestPhone.trim(),
         cv_url: safeName,
-        cover_letter: guestCover.trim() || null,
+        cover_letter: null,
       });
       if (insErr) throw insErr;
 
@@ -149,7 +151,8 @@ const JobDetailsPage = () => {
       setGuestOpen(false);
       setGuestName('');
       setGuestEmail('');
-      setGuestCover('');
+      setGuestPhone('');
+
       setGuestCv(null);
       setGuestAcceptTerms(false);
     } catch (err: any) {
@@ -255,7 +258,8 @@ const JobDetailsPage = () => {
             if (!open) {
               setGuestName('');
               setGuestEmail('');
-              setGuestCover('');
+              setGuestPhone('');
+
               setGuestCv(null);
               setGuestAcceptTerms(false);
             }
@@ -276,12 +280,15 @@ const JobDetailsPage = () => {
                 <Input type="email" value={guestEmail} onChange={(e) => setGuestEmail(e.target.value)} required />
               </div>
               <div className="space-y-2">
+                <Label>Număr de telefon</Label>
+                <Input type="tel" value={guestPhone} onChange={(e) => setGuestPhone(e.target.value)} placeholder="07xxxxxxxx" pattern="0[0-9]{9}" maxLength={10} required />
+              </div>
+              <div className="space-y-2">
                 <Label>CV (PDF)</Label>
                 <Input type="file" accept="application/pdf" onChange={(e) => setGuestCv(e.target.files?.[0] || null)} required />
               </div>
               <div className="space-y-2">
-                <Label>Scrisoare (opțional)</Label>
-                <Textarea rows={3} value={guestCover} onChange={(e) => setGuestCover(e.target.value)} />
+
               </div>
               <div className="flex items-start gap-3 rounded-lg border border-border p-3 bg-muted/40">
                 <Checkbox

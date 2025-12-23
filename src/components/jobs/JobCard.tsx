@@ -29,7 +29,8 @@ const JobCard = ({ job }: JobCardProps) => {
   const [guestOpen, setGuestOpen] = useState(false);
   const [guestName, setGuestName] = useState('');
   const [guestEmail, setGuestEmail] = useState('');
-  const [guestCover, setGuestCover] = useState('');
+  const [guestPhone, setGuestPhone] = useState('');
+
   const [guestCv, setGuestCv] = useState<File | null>(null);
   const [guestAcceptTerms, setGuestAcceptTerms] = useState(false);
   const [guestSubmitting, setGuestSubmitting] = useState(false);
@@ -114,8 +115,9 @@ const JobCard = ({ job }: JobCardProps) => {
         job_id: validJobId,
         name: guestName.trim(),
         email: guestEmail.trim(),
+        phone: guestPhone.trim(),
         cv_url: safeName,
-        cover_letter: guestCover.trim() || null,
+        cover_letter: null,
       });
       if (insErr) throw insErr;
 
@@ -123,7 +125,8 @@ const JobCard = ({ job }: JobCardProps) => {
       setGuestOpen(false);
       setGuestName('');
       setGuestEmail('');
-      setGuestCover('');
+      setGuestPhone('');
+
       setGuestCv(null);
       setGuestAcceptTerms(false);
     } catch (err: any) {
@@ -209,7 +212,8 @@ const JobCard = ({ job }: JobCardProps) => {
           if (!open) {
             setGuestName('');
             setGuestEmail('');
-            setGuestCover('');
+            setGuestPhone('');
+
             setGuestCv(null);
             setGuestAcceptTerms(false);
           }
@@ -230,13 +234,14 @@ const JobCard = ({ job }: JobCardProps) => {
               <Input type="email" value={guestEmail} onChange={(e) => setGuestEmail(e.target.value)} required />
             </div>
             <div className="space-y-2">
+              <Label>Număr de telefon</Label>
+              <Input type="tel" value={guestPhone} onChange={(e) => setGuestPhone(e.target.value)} placeholder="07xxxxxxxx" pattern="0[0-9]{9}" maxLength={10} required />
+            </div>
+            <div className="space-y-2">
               <Label>CV (PDF)</Label>
               <Input type="file" accept="application/pdf" onChange={(e) => setGuestCv(e.target.files?.[0] || null)} required />
             </div>
-            <div className="space-y-2">
-              <Label>Scrisoare (opțional)</Label>
-              <Textarea rows={3} value={guestCover} onChange={(e) => setGuestCover(e.target.value)} />
-            </div>
+
             <div className="flex items-start gap-3 rounded-lg border border-border p-3 bg-muted/40">
               <Checkbox
                 id={`guest-terms-${job.id}`}
