@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import PageLayout from '@/components/layout/PageLayout';
+import { Helmet } from 'react-helmet-async';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
@@ -38,7 +39,22 @@ const CompanyPublicPage = () => {
   });
 
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>{companyQuery.data?.name ? `${companyQuery.data.name} - Companie pe Joben.eu` : 'Companie pe Joben.eu'}</title>
+        <meta name="description" content={companyQuery.data?.description?.slice(0, 150) || 'Profil companie pe Joben.eu'} />
+        <meta property="og:title" content={companyQuery.data?.name ? `${companyQuery.data.name} - Companie pe Joben.eu` : 'Companie pe Joben.eu'} />
+        <meta property="og:description" content={companyQuery.data?.description?.slice(0, 150) || 'Profil companie pe Joben.eu'} />
+        <meta property="og:image" content="/og-image.png" />
+        <meta property="og:type" content="profile" />
+        <meta property="og:site_name" content="Joben.eu" />
+        <meta property="og:url" content={window.location.href} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={companyQuery.data?.name ? `${companyQuery.data.name} - Companie pe Joben.eu` : 'Companie pe Joben.eu'} />
+        <meta name="twitter:description" content={companyQuery.data?.description?.slice(0, 150) || 'Profil companie pe Joben.eu'} />
+        <meta name="twitter:image" content="/og-image.png" />
+      </Helmet>
+      <PageLayout>
       <div className="container mx-auto px-4 py-10 space-y-6">
         <Button variant="ghost" asChild>
           <Link to={-1 as any}>
@@ -104,7 +120,10 @@ const CompanyPublicPage = () => {
           </CardContent>
         </Card>
       </div>
+
+
     </PageLayout>
+    </>
   );
 };
 

@@ -1,4 +1,5 @@
 import PageLayout from '@/components/layout/PageLayout';
+import { Helmet } from 'react-helmet-async';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -161,7 +162,22 @@ const CompaniesPage = () => {
   };
 
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>Companii pe Joben.eu - Angajatori din România</title>
+        <meta name="description" content="Descoperă companii și angajatori activi pe Joben.eu. Vezi profiluri, joburi și contactează direct." />
+        <meta property="og:title" content="Companii pe Joben.eu - Angajatori din România" />
+        <meta property="og:description" content="Descoperă companii și angajatori activi pe Joben.eu. Vezi profiluri, joburi și contactează direct." />
+        <meta property="og:image" content="/og-image.png" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Joben.eu" />
+        <meta property="og:url" content={window.location.href} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Companii pe Joben.eu - Angajatori din România" />
+        <meta name="twitter:description" content="Descoperă companii și angajatori activi pe Joben.eu. Vezi profiluri, joburi și contactează direct." />
+        <meta name="twitter:image" content="/og-image.png" />
+      </Helmet>
+      <PageLayout>
       <div className="container mx-auto px-4 py-10 space-y-8">
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div>
@@ -286,7 +302,10 @@ const CompaniesPage = () => {
           </Card>
         </div>
       </div>
+
+
     </PageLayout>
+    </>
   );
 };
 

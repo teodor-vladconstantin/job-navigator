@@ -1,8 +1,24 @@
 import { Clock, Mail, MessageSquare } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
+import { Helmet } from 'react-helmet-async';
 
 const ContactPage = () => (
-  <PageLayout>
+  <>
+    <Helmet>
+      <title>Contact Joben.eu - Suport rapid pentru candidați și angajatori</title>
+      <meta name="description" content="Contactează Joben.eu pentru suport, întrebări sau colaborări. Răspundem rapid la orice solicitare." />
+      <meta property="og:title" content="Contact Joben.eu - Suport rapid pentru candidați și angajatori" />
+      <meta property="og:description" content="Contactează Joben.eu pentru suport, întrebări sau colaborări. Răspundem rapid la orice solicitare." />
+      <meta property="og:image" content="/og-image.png" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Joben.eu" />
+      <meta property="og:url" content={window.location.href} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Contact Joben.eu - Suport rapid pentru candidați și angajatori" />
+      <meta name="twitter:description" content="Contactează Joben.eu pentru suport, întrebări sau colaborări. Răspundem rapid la orice solicitare." />
+      <meta name="twitter:image" content="/og-image.png" />
+    </Helmet>
+    <PageLayout>
     <div className="container mx-auto px-4 py-12 space-y-10">
       <div className="space-y-3 text-center max-w-3xl mx-auto">
         <h1 className="font-heading text-3xl md:text-4xl font-bold">Contact</h1>
@@ -55,7 +71,10 @@ const ContactPage = () => (
         </div>
       </div>
     </div>
+
+
   </PageLayout>
+  </>
 );
 
 export default ContactPage;

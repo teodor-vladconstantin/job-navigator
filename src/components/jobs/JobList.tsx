@@ -13,7 +13,7 @@ interface JobListProps {
 }
 
 const JobListSkeleton = () => (
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
     {[...Array(6)].map((_, i) => (
       <div key={i} className="border border-border rounded-lg p-6 space-y-4">
         <div className="space-y-2">
@@ -62,8 +62,8 @@ const JobList = ({
   }
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {jobs.map((job) => (
           <JobCard
             key={job.id}
@@ -73,7 +73,7 @@ const JobList = ({
       </div>
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 pt-4">
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-2 sm:pt-4">
           <Button
             variant="outline"
             size="sm"
@@ -83,7 +83,7 @@ const JobList = ({
             <ChevronLeft className="w-4 h-4" />
           </Button>
           
-          <div className="flex items-center gap-1">
+          <div className="flex flex-wrap items-center gap-1">
             {[...Array(totalPages)].map((_, i) => {
               const page = i + 1;
               // Show first page, last page, current page, and pages around current

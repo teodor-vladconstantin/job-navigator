@@ -1,5 +1,6 @@
 import { CheckCircle2 } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
+import { Helmet } from 'react-helmet-async';
 
 const bullets = {
   transparenta: [
@@ -20,7 +21,22 @@ const bullets = {
 };
 
 const AboutPage = () => (
-  <PageLayout>
+  <>
+    <Helmet>
+      <title>Despre Joben.eu - Platformă rapidă pentru joburi</title>
+      <meta name="description" content="Află misiunea și valorile Joben.eu, platforma unde aplici la joburi în &lt;30 secunde, fără formulare inutile." />
+      <meta property="og:title" content="Despre Joben.eu - Platformă rapidă pentru joburi" />
+      <meta property="og:description" content="Află misiunea și valorile Joben.eu, platforma unde aplici la joburi în &lt;30 secunde, fără formulare inutile." />
+      <meta property="og:image" content="/og-image.png" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Joben.eu" />
+      <meta property="og:url" content={window.location.href} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Despre Joben.eu - Platformă rapidă pentru joburi" />
+      <meta name="twitter:description" content="Află misiunea și valorile Joben.eu, platforma unde aplici la joburi în &lt;30 secunde, fără formulare inutile." />
+      <meta name="twitter:image" content="/og-image.png" />
+    </Helmet>
+    <PageLayout>
     <div className="bg-gradient-hero">
       <div className="container mx-auto px-4 py-12 md:py-16 space-y-12">
         <header className="text-center space-y-4 max-w-3xl mx-auto">
@@ -88,8 +104,11 @@ const AboutPage = () => (
           </a>
         </section>
       </div>
+
+
     </div>
   </PageLayout>
+  </>
 );
 
 interface ValueCardProps {

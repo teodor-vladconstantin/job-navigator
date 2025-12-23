@@ -1,4 +1,5 @@
 import PageLayout from '@/components/layout/PageLayout';
+import { Helmet } from 'react-helmet-async';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -163,7 +164,22 @@ const ProfilePage = () => {
   };
 
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>Profilul meu - Joben.eu</title>
+        <meta name="description" content="Gestionează-ți profilul, CV-ul și datele de contact pe Joben.eu." />
+        <meta property="og:title" content="Profilul meu - Joben.eu" />
+        <meta property="og:description" content="Gestionează-ți profilul, CV-ul și datele de contact pe Joben.eu." />
+        <meta property="og:image" content="/og-image.png" />
+        <meta property="og:type" content="profile" />
+        <meta property="og:site_name" content="Joben.eu" />
+        <meta property="og:url" content={window.location.href} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Profilul meu - Joben.eu" />
+        <meta name="twitter:description" content="Gestionează-ți profilul, CV-ul și datele de contact pe Joben.eu." />
+        <meta name="twitter:image" content="/og-image.png" />
+      </Helmet>
+      <PageLayout>
       <div className="container mx-auto px-4 py-10">
         {/* Formular schimbare parolă */}
         <Card className="mb-8">
@@ -284,7 +300,10 @@ const ProfilePage = () => {
           </Dialog>
         )}
       </div>
+
+
     </PageLayout>
+    </>
   );
 };
 

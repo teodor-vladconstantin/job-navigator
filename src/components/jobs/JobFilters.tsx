@@ -53,8 +53,8 @@ const JobFilters = ({ filters, onChange, onReset }: JobFiltersProps) => {
     filters.seniorities.length;
 
   return (
-    <Card className="sticky top-4">
-      <CardHeader className="flex flex-row items-center justify-between">
+    <Card className="w-full lg:sticky lg:top-4">
+      <CardHeader className="flex flex-row items-center justify-between gap-2">
         <CardTitle className="text-lg">Filtre</CardTitle>
         {activeFilterCount > 0 && (
           <Button variant="ghost" size="sm" onClick={onReset} className="h-8 px-2">
@@ -63,9 +63,9 @@ const JobFilters = ({ filters, onChange, onReset }: JobFiltersProps) => {
           </Button>
         )}
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4 sm:space-y-6">
         {/* Location Filter */}
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           <Label className="text-sm font-semibold">Locație</Label>
           <Select
             value={filters.location}
@@ -98,11 +98,11 @@ const JobFilters = ({ filters, onChange, onReset }: JobFiltersProps) => {
         </div>
 
         {/* Job Type Filter */}
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           <Label className="text-sm font-semibold">Tip job</Label>
-          <div className="space-y-2">
+          <div className="space-y-1 sm:space-y-2">
             {Object.entries(JOB_TYPE_LABELS).map(([value, label]) => (
-              <div key={value} className="flex items-center space-x-2">
+              <div key={value} className="flex items-center space-x-1 sm:space-x-2">
                 <Checkbox
                   id={`job-type-${value}`}
                   checked={filters.jobTypes.includes(value)}
@@ -120,11 +120,11 @@ const JobFilters = ({ filters, onChange, onReset }: JobFiltersProps) => {
         </div>
 
         {/* Seniority Filter */}
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           <Label className="text-sm font-semibold">Nivel experiență</Label>
-          <div className="space-y-2">
+          <div className="space-y-1 sm:space-y-2">
             {Object.entries(SENIORITY_LABELS).map(([value, label]) => (
-              <div key={value} className="flex items-center space-x-2">
+              <div key={value} className="flex items-center space-x-1 sm:space-x-2">
                 <Checkbox
                   id={`seniority-${value}`}
                   checked={filters.seniorities.includes(value)}

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import PageLayout from '@/components/layout/PageLayout';
@@ -169,7 +170,24 @@ const JobDetailsPage = () => {
   }, [isLoading, data, error, navigate]);
 
   return (
-    <PageLayout>
+    <>
+      {data && (
+        <Helmet>
+          <title>{data.title} | Joben.eu</title>
+          <meta name="description" content={data.description?.slice(0, 150) || 'Job disponibil pe Joben.eu'} />
+          <meta property="og:title" content={data.title} />
+          <meta property="og:description" content={data.description?.slice(0, 150) || 'Job disponibil pe Joben.eu'} />
+          <meta property="og:image" content="/og-image.png" />
+          <meta property="og:type" content="article" />
+          <meta property="og:site_name" content="Joben.eu" />
+          <meta property="og:url" content={window.location.href} />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={data.title} />
+          <meta name="twitter:description" content={data.description?.slice(0, 150) || 'Job disponibil pe Joben.eu'} />
+          <meta name="twitter:image" content="/og-image.png" />
+        </Helmet>
+      )}
+      <PageLayout>
       <div className="container mx-auto px-4 py-10">
         <Button variant="ghost" className="mb-6" onClick={() => navigate(-1)}>
           <ArrowLeft className="w-4 h-4 mr-2" /> Înapoi
@@ -207,25 +225,27 @@ const JobDetailsPage = () => {
                         data.company?.name ?? data.company_name
                       )}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="text-3xl font-bold leading-tight break-words">{data.title}</div>
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                      <div className="text-2xl xs:text-3xl font-bold leading-tight break-words max-w-full flex-1 min-w-0">{data.title}</div>
                       {/* LinkedIn Share Button */}
-                      <Button
-                        className="ml-2 px-4 py-2 bg-[#0A66C2] text-white font-semibold flex items-center gap-2 shadow-lg hover:bg-[#0A66C2] hover:shadow-[0_0_16px_4px_#0A66C2] focus:bg-[#0A66C2] focus:shadow-[0_0_16px_4px_#0A66C2] transition-all duration-200"
-                        style={{ boxShadow: '0 0 12px 2px #0A66C2' }}
-                        asChild
-                        title="Distribuie pe LinkedIn"
-                        aria-label="Distribuie pe LinkedIn"
-                      >
-                        <a
-                          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                      <div className="w-full sm:w-auto flex-shrink-0 mt-2 sm:mt-0">
+                        <Button
+                          className="w-full sm:w-auto px-4 py-2 bg-[#0A66C2] text-white font-semibold flex items-center justify-center gap-2 shadow-lg hover:bg-[#0A66C2] hover:shadow-[0_0_16px_4px_#0A66C2] focus:bg-[#0A66C2] focus:shadow-[0_0_16px_4px_#0A66C2] transition-all duration-200"
+                          style={{ boxShadow: '0 0 12px 2px #0A66C2' }}
+                          asChild
+                          title="Distribuie pe LinkedIn"
+                          aria-label="Distribuie pe LinkedIn"
                         >
-                          <Linkedin className="w-5 h-5" />
-                          <span className="ml-2">Distribuie pe LinkedIn</span>
-                        </a>
-                      </Button>
+                          <a
+                            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Linkedin className="w-5 h-5" />
+                            <span className="ml-2">Distribuie pe LinkedIn</span>
+                          </a>
+                        </Button>
+                      </div>
                     </div>
                   </CardTitle>
                   <div className="flex flex-wrap gap-2 mt-2">
@@ -335,7 +355,10 @@ const JobDetailsPage = () => {
           </DialogContent>
         </Dialog>
       </div>
+
+
     </PageLayout>
+    </>
   );
 };
 

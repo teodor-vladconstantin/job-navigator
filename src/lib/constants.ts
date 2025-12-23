@@ -54,7 +54,7 @@ export const APPLICATION_STATUS_COLORS: Record<string, string> = {
 };
 
 // Lists
-export const LOCATIONS = [
+export const LOCATIONS = Array.from(new Set([
   'Remote',
   // Alba
   'Alba Iulia', 'Aiud', 'Blaj', 'Cugir', 'Ocna Mures', 'Sebes', 'Teius', 'Zlatna',
@@ -140,7 +140,7 @@ export const LOCATIONS = [
   'Adjud', 'Focsani', 'Marasesti', 'Odobesti', 'Panciu',
   // Bucuresti
   'Bucuresti',
-];
+]));
 
 // TECH_STACK_OPTIONS removed per request to exclude tech-related fields
 

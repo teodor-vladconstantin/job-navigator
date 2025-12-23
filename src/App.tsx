@@ -3,6 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { HelmetProvider } from 'react-helmet-async';
+import { DefaultHelmet } from './lib/DefaultHelmet';
 import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -35,99 +37,103 @@ const ScrollToTop = ({ children }: { children: React.ReactNode }) => {
   return children;
 };
 
+
 const App = () => (
-  <TooltipProvider>
-    <Toaster />
-    <Sonner />
-    <BrowserRouter>
-      <AuthProvider>
-        <ScrollToTop>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/jobs/:id" element={<JobDetailsPage />} />
-            <Route path="/companies/:id" element={<CompanyPublicPage />} />
-            <Route path="/termeni" element={<TermsPage />} />
-            <Route path="/confidentialitate" element={<PrivacyPage />} />
-            <Route path="/despre" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/resetare-parola-noua" element={<ResetNewPasswordPage />} />
-            <Route path="/resetare-parola" element={<ForgotPasswordPage />} />
-            <Route
-              path="/dashboard/employer"
-              element={
-                <ProtectedRoute>
-                  <RoleRoute allowedRole="employer">
-                    <EmployerDashboard />
-                  </RoleRoute>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/employer/post-job"
-              element={
-                <ProtectedRoute>
-                  <RoleRoute allowedRole="employer">
-                    <PostJobPage />
-                  </RoleRoute>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/employer/companies"
-              element={
-                <ProtectedRoute>
-                  <RoleRoute allowedRole="employer">
-                    <CompaniesPage />
-                  </RoleRoute>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/employer/jobs/:id/edit"
-              element={
-                <ProtectedRoute>
-                  <RoleRoute allowedRole="employer">
-                    <EditJobPage />
-                  </RoleRoute>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/candidate"
-              element={
-                <ProtectedRoute>
-                  <RoleRoute allowedRole="candidate">
-                    <CandidateDashboard />
-                  </RoleRoute>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/candidate/applications"
-              element={
-                <ProtectedRoute>
-                  <RoleRoute allowedRole="candidate">
-                    <CandidateApplicationsPage />
-                  </RoleRoute>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </ScrollToTop>
-      </AuthProvider>
-    </BrowserRouter>
-  </TooltipProvider>
+  <HelmetProvider>
+    <TooltipProvider>
+      <DefaultHelmet />
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <AuthProvider>
+          <ScrollToTop>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/jobs/:id" element={<JobDetailsPage />} />
+              <Route path="/companies/:id" element={<CompanyPublicPage />} />
+              <Route path="/termeni" element={<TermsPage />} />
+              <Route path="/confidentialitate" element={<PrivacyPage />} />
+              <Route path="/despre" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/resetare-parola-noua" element={<ResetNewPasswordPage />} />
+              <Route path="/resetare-parola" element={<ForgotPasswordPage />} />
+              <Route
+                path="/dashboard/employer"
+                element={
+                  <ProtectedRoute>
+                    <RoleRoute allowedRole="employer">
+                      <EmployerDashboard />
+                    </RoleRoute>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/employer/post-job"
+                element={
+                  <ProtectedRoute>
+                    <RoleRoute allowedRole="employer">
+                      <PostJobPage />
+                    </RoleRoute>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/employer/companies"
+                element={
+                  <ProtectedRoute>
+                    <RoleRoute allowedRole="employer">
+                      <CompaniesPage />
+                    </RoleRoute>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/employer/jobs/:id/edit"
+                element={
+                  <ProtectedRoute>
+                    <RoleRoute allowedRole="employer">
+                      <EditJobPage />
+                    </RoleRoute>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/candidate"
+                element={
+                  <ProtectedRoute>
+                    <RoleRoute allowedRole="candidate">
+                      <CandidateDashboard />
+                    </RoleRoute>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/candidate/applications"
+                element={
+                  <ProtectedRoute>
+                    <RoleRoute allowedRole="candidate">
+                      <CandidateApplicationsPage />
+                    </RoleRoute>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </ScrollToTop>
+        </AuthProvider>
+      </BrowserRouter>
+    </TooltipProvider>
+  </HelmetProvider>
 );
 
 export default App;

@@ -1,8 +1,24 @@
 import React from 'react';
 import PageLayout from '@/components/layout/PageLayout';
+import { Helmet } from 'react-helmet-async';
 
 const TermsPage = () => (
-  <PageLayout>
+  <>
+    <Helmet>
+      <title>Termeni și condiții - Joben.eu</title>
+      <meta name="description" content="Citește termenii și condițiile de utilizare a platformei Joben.eu." />
+      <meta property="og:title" content="Termeni și condiții - Joben.eu" />
+      <meta property="og:description" content="Citește termenii și condițiile de utilizare a platformei Joben.eu." />
+      <meta property="og:image" content="/og-image.png" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Joben.eu" />
+      <meta property="og:url" content={window.location.href} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Termeni și condiții - Joben.eu" />
+      <meta name="twitter:description" content="Citește termenii și condițiile de utilizare a platformei Joben.eu." />
+      <meta name="twitter:image" content="/og-image.png" />
+    </Helmet>
+    <PageLayout>
     <div className="container mx-auto px-4 py-12 space-y-8">
       <div className="space-y-2 text-center max-w-3xl mx-auto">
         <h1 className="font-heading text-3xl md:text-4xl font-bold">Termeni și Condiții</h1>
@@ -95,8 +111,11 @@ const TermsPage = () => (
           <p className="text-muted-foreground">Pentru întrebări suplimentare sau notificări, vă rugăm să contactați: admin@joben.eu</p>
         </Section>
       </div>
+
+
     </div>
   </PageLayout>
+  </>
 );
 
 interface SectionProps {

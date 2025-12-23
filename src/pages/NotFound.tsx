@@ -5,11 +5,13 @@ import { Home, Search } from 'lucide-react';
 
 const NotFound = () => {
   return (
-    <PageLayout>
-      <div className="container mx-auto px-4 py-20">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="mb-8">
-            <h1 className="font-heading font-extrabold text-8xl bg-gradient-primary bg-clip-text text-transparent mb-4">
+
+    </PageLayout>
+    </>
+  );
+};
+
+export default NotFoundPage;
               404
             </h1>
             <h2 className="font-heading font-bold text-3xl mb-4">

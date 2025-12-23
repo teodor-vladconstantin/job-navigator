@@ -1,10 +1,12 @@
 import PageLayout from '@/components/layout/PageLayout';
+import { Helmet } from 'react-helmet-async';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useEffect, useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Briefcase, Loader2 } from 'lucide-react';
@@ -21,7 +23,7 @@ const PostJobPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [jobType, setJobType] = useState<keyof typeof JOB_TYPE_LABELS>('remote');
   const [seniority, setSeniority] = useState<keyof typeof SENIORITY_LABELS>('junior');
-  const [location, setLocation] = useState<string>('Remote');
+  const [locations, setLocations] = useState<string[]>(['Remote']);
   const [locQuery, setLocQuery] = useState<string>('');
   const filteredLocations = LOCATIONS.filter((l) => l.toLowerCase().includes(locQuery.trim().toLowerCase()));
   const locInputRef = useRef<HTMLInputElement | null>(null);
@@ -67,7 +69,7 @@ const PostJobPage = () => {
 
     const formData = new FormData(form);
     const title = String(formData.get('title') || '').trim();
-    const selectedLocation = location.trim();
+    const selectedLocation = locations.join(', ');
     const selectedJobType = jobType;
     const selectedSeniority = seniority;
     const salary_min_raw = formData.get('salary_min') as string | null;
@@ -147,55 +149,73 @@ const PostJobPage = () => {
   };
 
   return (
-    <PageLayout>
-      <div className="container mx-auto px-4 py-10">
-        <div className="mb-6 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center text-white">
+    <>
+      <Helmet>
+        <title>Postează job - Joben.eu</title>
+        <meta name="description" content="Adaugă rapid un job nou pe Joben.eu și găsește candidați potriviți în câteva minute." />
+        <meta property="og:title" content="Postează job - Joben.eu" />
+        <meta property="og:description" content="Adaugă rapid un job nou pe Joben.eu și găsește candidați potriviți în câteva minute." />
+        <meta property="og:image" content="/og-image.png" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Joben.eu" />
+        <meta property="og:url" content={window.location.href} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Postează job - Joben.eu" />
+        <meta name="twitter:description" content="Adaugă rapid un job nou pe Joben.eu și găsește candidați potriviți în câteva minute." />
+        <meta name="twitter:image" content="/og-image.png" />
+      </Helmet>
+      <PageLayout>
+
+      <div className="container mx-auto px-2 sm:px-4 py-6 md:py-10">
+        <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center text-white shrink-0">
             <Briefcase className="w-5 h-5" />
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Panou angajator</p>
-            <h1 className="font-heading text-3xl font-bold">Postează un job</h1>
-            <p className="text-muted-foreground">Formular placeholder; conectăm inserția în Supabase în pasul următor.</p>
+            <h1 className="font-heading text-2xl md:text-3xl font-bold">Postează un job</h1>
+            <p className="text-muted-foreground text-sm">Formular placeholder; conectăm inserția în Supabase în pasul următor.</p>
           </div>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Detalii job</CardTitle>
+            <CardTitle className="text-lg md:text-xl">Detalii job</CardTitle>
           </CardHeader>
           <CardContent>
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="title">Titlu</Label>
-                  <Input id="title" name="title" placeholder="Ex: Frontend Engineer" required />
+                  <Input id="title" name="title" placeholder="Ex: Frontend Engineer" required className="min-h-[44px]" />
                 </div>
                 <div>
-                  <Label>Locație</Label>
-                  <Select value={location} onValueChange={setLocation}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Alege locația" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <div className="p-2">
-                        <Input
-                          ref={locInputRef}
-                          placeholder="Caută locație..."
-                          value={locQuery}
-                          onChange={(e) => setLocQuery(e.target.value)}
-                          onKeyDown={(e) => { e.stopPropagation(); e.nativeEvent.stopImmediatePropagation(); }}
-                          onKeyUp={(e) => { e.stopPropagation(); }}
-                          onKeyPress={(e) => { e.stopPropagation(); }}
-                        />
-                      </div>
+                  <Label>Locații</Label>
+                  <div className="border rounded-md p-2 max-h-60 overflow-y-auto bg-background">
+                    <Input
+                      ref={locInputRef}
+                      placeholder="Caută locație..."
+                      value={locQuery}
+                      onChange={(e) => setLocQuery(e.target.value)}
+                      className="mb-2 min-h-[44px]"
+                    />
+                    <div className="flex flex-wrap gap-2">
                       {filteredLocations.map(loc => (
-                        <SelectItem key={loc} value={loc}>
-                          {loc}
-                        </SelectItem>
+                        <div key={loc} className="flex items-center space-x-2 py-1 min-w-[120px]">
+                          <Checkbox
+                            id={`loc-${loc}`}
+                            checked={locations.includes(loc)}
+                            onCheckedChange={(checked) => {
+                              setLocations((prev) =>
+                                checked ? [...prev, loc] : prev.filter((l) => l !== loc)
+                              );
+                            }}
+                          />
+                          <label htmlFor={`loc-${loc}`} className="text-sm cursor-pointer">{loc}</label>
+                        </div>
                       ))}
-                    </SelectContent>
-                  </Select>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -207,7 +227,7 @@ const PostJobPage = () => {
                     value={selectedCompanyId}
                     onValueChange={(val) => setSelectedCompanyId(val)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="min-h-[44px]">
                       <SelectValue placeholder={companiesLoading ? 'Se încarcă...' : 'Alege compania'} />
                     </SelectTrigger>
                     <SelectContent>
@@ -236,7 +256,7 @@ const PostJobPage = () => {
                 <div>
                   <Label>Tip job</Label>
                   <Select value={jobType} onValueChange={(v) => setJobType(v as keyof typeof JOB_TYPE_LABELS)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="min-h-[44px]">
                       <SelectValue placeholder="Alege tipul" />
                     </SelectTrigger>
                     <SelectContent>
@@ -251,7 +271,7 @@ const PostJobPage = () => {
                 <div>
                   <Label>Nivel</Label>
                   <Select value={seniority} onValueChange={(v) => setSeniority(v as keyof typeof SENIORITY_LABELS)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="min-h-[44px]">
                       <SelectValue placeholder="Alege nivelul" />
                     </SelectTrigger>
                     <SelectContent>
@@ -268,15 +288,13 @@ const PostJobPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="salary_min">Salariu minim (opțional)</Label>
-                  <Input id="salary_min" name="salary_min" type="number" min={0} placeholder="12000" />
+                  <Input id="salary_min" name="salary_min" type="number" min={0} placeholder="12000" className="min-h-[44px]" />
                 </div>
                 <div>
                   <Label htmlFor="salary_max">Salariu maxim (opțional)</Label>
-                  <Input id="salary_max" name="salary_max" type="number" min={0} placeholder="18000" />
+                  <Input id="salary_max" name="salary_max" type="number" min={0} placeholder="18000" className="min-h-[44px]" />
                 </div>
               </div>
-
-              {/* Tech stack field removed per product request */}
 
               <div>
                 <Label htmlFor="description">Job description</Label>
@@ -286,10 +304,11 @@ const PostJobPage = () => {
                   placeholder="Descriere unică (rol, responsabilități, cerințe)"
                   rows={6}
                   required
+                  className="min-h-[120px]"
                 />
               </div>
 
-              <Button type="submit" className="bg-gradient-primary" disabled={submitting}>
+              <Button type="submit" className="bg-gradient-primary w-full md:w-auto min-h-[44px] text-base" disabled={submitting}>
                 {submitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
                 {submitting ? 'Se trimite...' : 'Publică job'}
               </Button>
@@ -297,7 +316,10 @@ const PostJobPage = () => {
           </CardContent>
         </Card>
       </div>
+
+
     </PageLayout>
+    </>
   );
 };
 

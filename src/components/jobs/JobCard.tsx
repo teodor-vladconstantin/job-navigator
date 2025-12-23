@@ -141,22 +141,22 @@ const JobCard = ({ job }: JobCardProps) => {
 
   return (
     <Card className="group hover:shadow-card transition-smooth border-border">
-      <CardContent className="p-4 sm:p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex gap-3 flex-1">
+      <CardContent className="p-3 sm:p-6">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between mb-3">
+          <div className="flex gap-3 flex-1 items-start">
             {logoUrl ? (
-              <div className="w-12 h-12 rounded border border-border bg-muted/60 flex items-center justify-center overflow-hidden">
+              <div className="w-12 h-12 rounded border border-border bg-muted/60 flex items-center justify-center overflow-hidden shrink-0">
                 <img src={logoUrl} alt={companyName} className="w-full h-full object-contain" />
               </div>
             ) : (
-              <div className="w-12 h-12 rounded border border-border bg-muted/60 flex items-center justify-center text-sm font-medium text-muted-foreground">
+              <div className="w-12 h-12 rounded border border-border bg-muted/60 flex items-center justify-center text-sm font-medium text-muted-foreground shrink-0">
                 {companyName?.[0]?.toUpperCase() ?? '—'}
               </div>
             )}
             <div className="flex-1 min-w-0">
               <Link to={`/jobs/${job.id}`}>
-                <h3 className="font-heading font-semibold text-xl mb-1 group-hover:text-primary transition-smooth truncate">
-                  {job.title}
+                <h3 className="font-heading font-semibold text-lg sm:text-xl mb-1 group-hover:text-primary transition-smooth break-words whitespace-pre-line word-break break-all hyphens-auto max-w-full" style={{overflowWrap:'anywhere'}}>
+                        {job.title.split(' ').join('\n')}
                 </h3>
               </Link>
               <p className="text-sm text-muted-foreground font-medium truncate">{companyName}</p>
@@ -164,44 +164,44 @@ const JobCard = ({ job }: JobCardProps) => {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-4">
-          <Badge variant="secondary" className="flex items-center gap-1">
+        <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
+          <Badge variant="secondary" className="flex items-center gap-1 min-w-[90px]">
             <MapPin className="w-3 h-3" />
             {job.location}
           </Badge>
-          <Badge variant="secondary" className="flex items-center gap-1">
+          <Badge variant="secondary" className="flex items-center gap-1 min-w-[90px]">
             <Briefcase className="w-3 h-3" />
             {JOB_TYPE_LABELS[job.job_type]}
           </Badge>
-          <Badge variant="secondary" className="flex items-center gap-1">
+          <Badge variant="secondary" className="flex items-center gap-1 min-w-[90px]">
             <TrendingUp className="w-3 h-3" />
             {SENIORITY_LABELS[job.seniority]}
           </Badge>
         </div>
 
         {job.salary_public && job.salary_min && (
-          <p className="text-sm font-semibold text-primary mb-3">
+          <p className="text-sm font-semibold text-primary mb-2 sm:mb-3">
             {formatSalary(job.salary_min, job.salary_max)}
           </p>
         )}
 
-        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+        <p className="text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-3 sm:line-clamp-2 break-words" style={{overflowWrap:'anywhere'}}>
           {truncateText(job.description, 150)}
         </p>
 
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs text-muted-foreground">
           <span>{formatRelativeTime(new Date(job.created_at))}</span>
-          <div className="flex items-center gap-2 flex-wrap">
-            <Link to={`/jobs/${job.id}`}>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2 flex-wrap w-full sm:w-auto">
+            <Link to={`/jobs/${job.id}`} className="w-full sm:w-auto">
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-primary hover:text-black dark:hover:text-black focus:text-black dark:focus:text-black"
+                className="w-full sm:w-auto text-primary hover:text-black dark:hover:text-black focus:text-black dark:focus:text-black min-h-[40px]"
               >
                 Vezi detalii →
               </Button>
             </Link>
-            <Button size="sm" className="bg-gradient-primary" disabled={applying} onClick={handleApplyClick}>
+            <Button size="sm" className="w-full sm:w-auto bg-gradient-primary min-h-[40px]" disabled={applying} onClick={handleApplyClick}>
               {applying ? <Skeleton className="w-3 h-3 mr-2" /> : <FileText className="w-3 h-3 mr-2" />}
               {applying ? 'Se trimite...' : 'Aplică'}
             </Button>

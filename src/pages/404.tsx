@@ -1,5 +1,6 @@
 
 import PageLayout from '@/components/layout/PageLayout';
+import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Home, Search } from 'lucide-react';
@@ -7,7 +8,22 @@ import { Home, Search } from 'lucide-react';
 
 const NotFoundPage = () => {
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>404 - Pagină inexistentă | Joben.eu</title>
+        <meta name="description" content="Pagina căutată nu există pe Joben.eu. Înapoi la joburi sau homepage." />
+        <meta property="og:title" content="404 - Pagină inexistentă | Joben.eu" />
+        <meta property="og:description" content="Pagina căutată nu există pe Joben.eu. Înapoi la joburi sau homepage." />
+        <meta property="og:image" content="/og-image.png" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Joben.eu" />
+        <meta property="og:url" content={window.location.href} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="404 - Pagină inexistentă | Joben.eu" />
+        <meta name="twitter:description" content="Pagina căutată nu există pe Joben.eu. Înapoi la joburi sau homepage." />
+        <meta name="twitter:image" content="/og-image.png" />
+      </Helmet>
+      <PageLayout>
       <div className="container mx-auto px-4 py-20">
         <div className="max-w-2xl mx-auto text-center">
           <div className="mb-8">
@@ -39,7 +55,9 @@ const NotFoundPage = () => {
           </div>
         </div>
       </div>
+
     </PageLayout>
+    </>
   );
 };
 

@@ -1,4 +1,5 @@
 import PageLayout from '@/components/layout/PageLayout';
+import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -109,7 +110,22 @@ const RegisterPage = () => {
   };
 
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>Înregistrare - Joben.eu</title>
+        <meta name="description" content="Creează-ți cont pe Joben.eu și aplică la joburi rapid, fără formulare inutile." />
+        <meta property="og:title" content="Înregistrare - Joben.eu" />
+        <meta property="og:description" content="Creează-ți cont pe Joben.eu și aplică la joburi rapid, fără formulare inutile." />
+        <meta property="og:image" content="/og-image.png" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Joben.eu" />
+        <meta property="og:url" content={window.location.href} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Înregistrare - Joben.eu" />
+        <meta name="twitter:description" content="Creează-ți cont pe Joben.eu și aplică la joburi rapid, fără formulare inutile." />
+        <meta name="twitter:image" content="/og-image.png" />
+      </Helmet>
+      <PageLayout>
       <div className="container mx-auto px-4 py-20">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
@@ -322,7 +338,10 @@ const RegisterPage = () => {
           </Card>
         </div>
       </div>
+
+
     </PageLayout>
+    </>
   );
 };
 
