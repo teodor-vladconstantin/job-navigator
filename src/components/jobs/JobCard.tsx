@@ -155,8 +155,12 @@ const JobCard = ({ job }: JobCardProps) => {
             )}
             <div className="flex-1 min-w-0">
               <Link to={`/jobs/${job.id}`}>
-                <h3 className="font-heading font-semibold text-lg sm:text-xl mb-1 group-hover:text-primary transition-smooth break-words whitespace-pre-line word-break break-all hyphens-auto max-w-full" style={{overflowWrap:'anywhere'}}>
-                        {job.title.split(' ').join('\n')}
+                <h3
+                  className="font-heading font-semibold text-lg sm:text-xl mb-1 group-hover:text-primary transition-smooth break-words max-w-full"
+                  style={{ overflowWrap: 'anywhere', wordBreak: 'break-word', whiteSpace: 'pre-line' }}
+                >
+                  <span className="block sm:hidden">{job.title.split(' ').join('\n')}</span>
+                  <span className="hidden sm:inline">{job.title}</span>
                 </h3>
               </Link>
               <p className="text-sm text-muted-foreground font-medium truncate">{companyName}</p>
