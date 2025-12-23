@@ -193,7 +193,11 @@ const JobCard = ({ job }: JobCardProps) => {
           <span>{formatRelativeTime(new Date(job.created_at))}</span>
           <div className="flex items-center gap-2 flex-wrap">
             <Link to={`/jobs/${job.id}`}>
-              <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-primary hover:text-black dark:hover:text-black focus:text-black dark:focus:text-black"
+              >
                 Vezi detalii →
               </Button>
             </Link>
