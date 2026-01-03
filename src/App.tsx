@@ -24,6 +24,10 @@ import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import JobenAiPage from "./pages/JobenAiPage";
+import CandidatesPage from "./pages/CandidatesPage";
+import EmployersPage from "./pages/EmployersPage";
+import AdminLeadsPage from "./pages/AdminLeadsPage";
 import { ProtectedRoute, RoleRoute } from "./components/ProtectedRoute";
 import { useEffect } from "react";
 
@@ -57,6 +61,17 @@ const App = () => (
               <Route path="/confidentialitate" element={<PrivacyPage />} />
               <Route path="/despre" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/ai" element={<JobenAiPage />} />
+              <Route path="/candidati" element={<CandidatesPage />} />
+              <Route path="/angajatori" element={<EmployersPage />} />
+              <Route 
+                path="/admin/leads" 
+                element={
+                  <ProtectedRoute>
+                    <AdminLeadsPage />
+                  </ProtectedRoute>
+                } 
+              />
               <Route path="/resetare-parola-noua" element={<ResetNewPasswordPage />} />
               <Route path="/resetare-parola" element={<ForgotPasswordPage />} />
               <Route

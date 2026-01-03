@@ -29,7 +29,7 @@ const Index = () => {
     jobTypes: filters.jobTypes,
     seniorities: filters.seniorities,
     page: currentPage,
-    pageSize: 20,
+    pageSize: 9,
   });
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -56,6 +56,13 @@ const Index = () => {
     if (searchSectionRef.current) {
       searchSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage > currentPage) {
+      scrollToJobs();
+    }
+    setCurrentPage(newPage);
   };
 
   return (
@@ -160,7 +167,7 @@ const Index = () => {
                 isLoading={isLoading}
                 currentPage={currentPage}
                 totalPages={totalPages}
-                onPageChange={setCurrentPage}
+                onPageChange={handlePageChange}
               />
             </div>
           </div>

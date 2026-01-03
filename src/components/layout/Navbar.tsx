@@ -71,6 +71,19 @@ const Navbar = () => {
             <span className="bg-gradient-primary bg-clip-text text-transparent">Joben.eu</span>
           </Link>
 
+          <div className="hidden md:flex items-center gap-6">
+            <Link to="/candidati" className="text-sm font-medium hover:text-primary transition-colors">
+              Candidați
+            </Link>
+            <Link to="/angajatori" className="text-sm font-medium hover:text-primary transition-colors">
+              Angajatori
+            </Link>
+            <Link to="/ai" className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1">
+              <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent font-bold">AI</span>
+              <span className="text-[10px] bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-full font-bold">NOU</span>
+            </Link>
+          </div>
+
           <div className="flex items-center gap-3">
             {/* Mobile hamburger - uses existing Drawer component (bottom-sheet)
                 placed in the top-right corner */}
@@ -93,6 +106,21 @@ const Navbar = () => {
                 </DrawerHeader>
 
                 <div className="p-4 space-y-3">
+                  <Link to="/candidati" className="block w-full">
+                    <Button variant="ghost" className="w-full justify-start">
+                      Candidați
+                    </Button>
+                  </Link>
+                  <Link to="/angajatori" className="block w-full">
+                    <Button variant="ghost" className="w-full justify-start">
+                      Angajatori
+                    </Button>
+                  </Link>
+                  <Link to="/ai" className="block w-full">
+                    <Button variant="ghost" className="w-full justify-start text-purple-600 font-medium">
+                      Joben AI
+                    </Button>
+                  </Link>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -172,6 +200,15 @@ const Navbar = () => {
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       
+                      {user.email === 'duku@constantinmedia.ro' && (
+                        <DropdownMenuItem asChild>
+                          <Link to="/admin/leads" className="cursor-pointer">
+                            <LayoutDashboard className="w-4 h-4 mr-2" />
+                            Admin Leads
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
+
                       <DropdownMenuItem asChild>
                         <Link to={getDashboardLink()} className="cursor-pointer">
                           <LayoutDashboard className="w-4 h-4 mr-2" />

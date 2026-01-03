@@ -1,7 +1,7 @@
 import PageLayout from '@/components/layout/PageLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileText, Plus, Briefcase, Loader2, AlertCircle, Pause, Play, Trash, Eye } from 'lucide-react';
+import { FileText, Plus, Briefcase, Loader2, AlertCircle, Pause, Play, Trash, Eye, Sparkles, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEmployerJobs } from '@/hooks/useEmployerJobs';
@@ -189,6 +189,11 @@ const EmployerDashboard = () => {
   return (
     <PageLayout>
       <div className="container mx-auto px-4 py-10 space-y-6">
+        {/* AI Agents Banner */}
+        <div className="bg-gradient-to-r from-purple-100 to-blue-100 ...">
+...
+        </div>
+
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div>
             <p className="text-sm text-muted-foreground">Panou angajator</p>
