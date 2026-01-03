@@ -39,7 +39,7 @@ const Footer = () => {
 
         <div className="border-t border-border mt-8 pt-8 text-sm text-muted-foreground">
           <div className="container mx-auto px-4 flex flex-col md:flex-row items-center md:justify-between gap-4">
-            <p className="text-center md:text-left">&copy; 2025 joben.eu. Toate drepturile rezervate.</p>
+            <p className="text-center md:text-left">&copy; {new Date().getFullYear()} joben.eu. Toate drepturile rezervate.</p>
 
             <div className="flex justify-center md:justify-end">
               <a
